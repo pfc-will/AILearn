@@ -1,0 +1,20 @@
+pandas
+matplotlib
+scikit-learn
+seaborn
+mlxtend
+sklearn-genetic
+scikit-opt
+tensorflow
+# tensorflow contains gpu from 2.11.0
+tensorflow-gpu;platform_system=="Windows"
+tensorflow-metal;sys_platform=="darwin"
+
+torch==2.0.1
+torchaudio==2.0.2
+torchvision==0.15.2
+
+# https://learn.microsoft.com/en-us/windows/ai/directml/gpu-tensorflow-plugin
+# for AMD GPU
+# tensorflow-cpu==2.10
+# tensorflow-directml-plugin

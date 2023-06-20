@@ -1,0 +1,4 @@
+mlxtend
+sklearn-genetic
+keras
+tensorflow
