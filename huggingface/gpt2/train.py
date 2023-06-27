@@ -220,6 +220,8 @@ def caculate_loss(logit, target, pad_idx, smoothing=True):
 
 
 def calculate_acc(logit, labels, ignore_index=-100):
+    # 实际训练中，input一句话前面内容，label是后面的内容
+    # 比如input: 我想吃你。 label:想吃你  这种
     logit = logit[..., :-1, :].contiguous().view(-1, logit.size(-1))
     labels = labels[..., 1:].contiguous().view(-1)
 
