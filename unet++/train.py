@@ -3,6 +3,8 @@ import os
 from collections import OrderedDict
 from glob import glob
 
+import archs
+import losses
 import pandas as pd
 import torch
 import torch.backends.cudnn as cudnn
@@ -11,14 +13,11 @@ import torch.optim as optim
 import yaml
 from albumentations.augmentations import transforms
 from albumentations.core.composition import Compose, OneOf
+from dataset import Dataset
+from metrics import iou_score
 from sklearn.model_selection import train_test_split
 from torch.optim import lr_scheduler
 from tqdm import tqdm
-
-import archs
-import losses
-from dataset import Dataset
-from metrics import iou_score
 from utils import AverageMeter, str2bool
 
 ARCH_NAMES = archs.__all__

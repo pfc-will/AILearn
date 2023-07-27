@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 try:
-    from LovaszSoftmax.pytorch.lovasz_losses import lovasz_hinge
+    from lovasz_losses import lovasz_hinge
 except ImportError:
     pass
 
