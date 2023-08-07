@@ -96,8 +96,9 @@ def train_epoch(model, train_dataloader, optimizer, scheduler, logger,
     total_loss = 0  # 记录下整个epoch的loss的总和
     epoch_correct_num = 0   # 每个epoch中,预测正确的word的数量
     epoch_total_num = 0  # 每个epoch中,预测的word的总数量
-
+    batch_count = len(train_dataloader)
     for batch_idx, (input_ids, labels) in enumerate(train_dataloader):
+        step_start_time = datetime.now()
         # 捕获cuda out of memory exception
         try:
             input_ids = input_ids.to(device)
@@ -147,6 +148,9 @@ def train_epoch(model, train_dataloader, optimizer, scheduler, logger,
             else:
                 logger.info(str(exception))
                 raise exception
+        step_end_time = datetime.now()
+        logger.info('time for one step in epoch: {}, total step: {}'.format(step_end_time - step_start_time, batch_count))
+
 
     # 记录当前epoch的平均loss与accuracy
     epoch_mean_loss = total_loss / len(train_dataloader)
@@ -237,10 +241,6 @@ def main():
     # 初始化参数
     args = set_args()
 
-    # 设置使用哪些显卡进行训练
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.device
-    args.cuda = not args.no_cuda
-
     # if args.batch_size < 2048 and args.warmup_steps <= 4000:
     #     print('[Warning] The warmup steps may be not enough.\n' \
     #           '(sz_b, warmup) = (2048, 4000) is the official setting.\n' \
@@ -251,7 +251,16 @@ def main():
     logger = set_logger(args.log_path)
     # 当用户使用GPU,并且GPU可用时
     args.cuda = torch.cuda.is_available() and not args.no_cuda
-    device = 'cuda:0' if args.cuda else 'cpu'
+    device = 'cpu'
+    if args.cuda:
+        device = 'cuda:0'
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.device
+    else:
+        try:
+            if torch.backends.mps.is_available():
+                device = "mps"
+        except:  
+            pass
     args.device = device
     logger.info('using device:{}'.format(device))
 
